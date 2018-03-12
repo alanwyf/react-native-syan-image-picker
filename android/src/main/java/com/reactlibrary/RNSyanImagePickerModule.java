@@ -4,7 +4,9 @@ package com.reactlibrary;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
+import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.Callback;
@@ -27,16 +29,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
-
+    private String TAG = "zgimage";
     private static String SY_SELECT_IMAGE_FAILED_CODE = "0"; // 失败时，Promise用到的code
 
     private final ReactApplicationContext reactContext;
 
     private List<LocalMedia> selectList = new ArrayList<>();
 
-    private Callback mPickerCallback; // 保存回调
+    public static Callback mPickerCallback; // 保存回调
 
-    private Promise mPickerPromise; // 保存Promise
+    public static Promise mPickerPromise; // 保存Promise
 
     public RNSyanImagePickerModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -58,15 +60,17 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void asyncShowImagePicker(ReadableMap options, Promise promise) {
-        this.mPickerCallback = null;
-        this.mPickerPromise = promise;
+        Log.v(TAG, "asyncShowImagePicker asyncShowImagePicker");
+        mPickerCallback = null;
+        mPickerPromise = promise;
         this.openImagePicker(options);
     }
 
     @ReactMethod
     public void openCamera(ReadableMap options, Callback callback) {
-        this.mPickerPromise = null;
-        this.mPickerCallback = callback;
+        Log.v(TAG, "openCamera");
+        mPickerPromise = null;
+        mPickerCallback = callback;
         this.openCamera(options);
     }
 
@@ -77,6 +81,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
      * @param options 相册参数
      */
     private void openImagePicker(ReadableMap options) {
+        Log.v(TAG, "openImagePicker");
         int imageCount = options.getInt("imageCount");
         boolean isCamera = options.getBoolean("isCamera");
         boolean isCrop = options.getBoolean("isCrop");
@@ -137,6 +142,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
      * @param options 相册参数
      */
     private void openCamera(ReadableMap options) {
+        Log.v(TAG, "openCamera");
         boolean isCrop = options.getBoolean("isCrop");
         int CropW = options.getInt("CropW");
         int CropH = options.getInt("CropH");
